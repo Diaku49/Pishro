@@ -2,22 +2,20 @@ const express = require('express');
 const { initializeSocketIO } = require('./socket-io');
 const compression = require('compression');
 const helmet = require('helmet');
-const dotenv = require('dotenv');
 const multer = require('multer');
-const path = require('path');
 const cloudinary = require('cloudinary').v2;
 const cors = require('cors');
+const appConfig = require('./config/app.config');
 
 
 const app = express();
-dotenv.config();
 
 
 // image cloud
 cloudinary.config({
-    cloud_name: process.env.Cloud_Name,
-    api_key: process.env.Cloud_ApiKey,
-    api_secret: process.env.Cloud_ApiSecret
+    cloud_name: appConfig.cloud.name,
+    api_key: appConfig.cloud.apiKey,
+    api_secret: appConfig.cloud.apiSecret
 });
 
 const storage = multer.memoryStorage();
@@ -135,7 +133,7 @@ app.use((error,req,res,next)=>{
 });
 
 
-const server = app.listen(process.env.PORT,(result,err)=>{
+const server = app.listen(appConfig.port,(result,err)=>{
     console.log('got connected to server.')
 });
 initializeSocketIO(server);
